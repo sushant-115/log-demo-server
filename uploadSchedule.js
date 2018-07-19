@@ -12,7 +12,8 @@ const uploadSchedule = () => {
   const fileName = [date.getFullYear(),date.getMonth()+1,date.getDate(),".txt"].join("");
   config.options.logfiles.forEach(file=>{
     const dirName =__dirname+file+fileName;
-    const stream = fs.createReadStream(dirName);
+    if(fs.existsSync(dirName)){
+      const stream = fs.createReadStream(dirName);
     s3fs.writeFile(file+fileName, stream).then((etag) => {
     if (etag){ console.log(etag);
     fs.unlink(dirName, (err) => {
@@ -24,7 +25,9 @@ const uploadSchedule = () => {
     })
   }
   })
-
+}else{
+  console.log("File does not exist" + dirName);
+}
   })
   
 }
