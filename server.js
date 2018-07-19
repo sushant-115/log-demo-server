@@ -22,7 +22,7 @@ app.listen(8000, (err) => {
   if (err) {
     console.error(err);
   } else {   //schedule format (sec min hour date month year )
-    schedule.scheduleJob("47 * * * * ", () => {
+    schedule.scheduleJob("53 * * * * ", () => {
       uploadSchedule();
     })
     console.log("8000");

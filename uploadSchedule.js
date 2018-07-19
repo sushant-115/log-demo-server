@@ -7,7 +7,7 @@ const s3fs = new S3FS("exotel-log-server", {
 })
 
 const uploadSchedule = () => {
-  const time = 1000*60*60*24*30; //milliseconds in 30 days
+  const time = 1000*60*60*24*config.options.period; //milliseconds in 30 days
   const date =new Date(Date.now()-time);
   const fileName = [date.getFullYear(),date.getMonth()+1,date.getDate(),".txt"].join("");
   config.options.logfiles.forEach(file=>{
