@@ -16,8 +16,8 @@ router.use(multipartyMiddleware);
 router.put("/testupload", (req, res, next) => {
   const file = req.files.file;
   const stream = fs.createReadStream(file.path);
-  return s3fs.writeFile("image/" + file.name, stream).then((err) => {
-    if (err) console.error(err);
+  return s3fs.writeFile("image/" + file.name, stream).then((etag) => {
+    if (etag) console.log(etag);
     fs.unlink(file.path, (err) => {
       if (err)
         console.error(err);
