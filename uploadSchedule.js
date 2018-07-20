@@ -34,7 +34,7 @@ const uploadSchedule = () => {
 
 }
 //module.exports = uploadSchedule;
-schedule.scheduleJob("34 * * * * ", () => {//schedule format (sec min hour date month year )
+schedule.scheduleJob(config.schedule, () => {
   uploadSchedule();
 })
 console.log("Task scheduled");
