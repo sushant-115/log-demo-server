@@ -1,8 +1,9 @@
 const config = require("./config");
 const fs = require("fs");
 const S3FS = require("s3fs");
+const schedule = require("node-schedule");
 const s3fs = new S3FS("exotel-log-server", {
-  accessKeyId: config.credentials.accessKeyId,
+  accessKeyId: config.credentials.accessKeyId,//vishnu.gajendran@exotel.in
   secretAccessKey: config.credentials.secretAccessKey
 })
 
@@ -32,4 +33,8 @@ const uploadSchedule = () => {
   })
 
 }
-module.exports = uploadSchedule;
+//module.exports = uploadSchedule;
+schedule.scheduleJob("34 * * * * ", () => {//schedule format (sec min hour date month year )
+  uploadSchedule();
+})
+console.log("Task scheduled");
