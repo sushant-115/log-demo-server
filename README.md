@@ -29,8 +29,7 @@ node downloadAction.js
 
 **change this in node_modules**
 ```
-exotel-log-demo/node_modules/aws-sdk/lib/request.js:31
-            throw err; // to (console.log("Nothing found with this key "+self.params.Key))
+    throw err; // to (console.log("Nothing found with this key "+self.params.Key))
             
             
             
