@@ -81,11 +81,11 @@ const downloadAction = () => {
     config.downloadOptions.forEach(option => {
       if (Array.isArray(option.date) && option.date.length > 0) {
         option.date.forEach(date => {
-          options.Key = option.directory + date + ".txt";
+          options.Key = option.directory + date ;
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
-          console.log(options.Key);
+          //console.log(options.Key);
           try {
             const stream = s3.getObject(options).createReadStream().pipe(fs.createWriteStream("downloads/" + options.Key));
           } catch (e) {
