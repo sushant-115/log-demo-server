@@ -27,12 +27,9 @@ node downloadAction.js
 ```
 >Enter the "from" to "to" date in **MM/DD/YYYY** format space separated
 
-**change this in node_modules**
+**change this in node_modules go to the directory exotel-log-demo/node_modules/aws-sdk/lib/request.js  (line no:31)**
 ```
-    throw err; // to (console.log("Nothing found with this key "+self.params.Key))
-            
-            
-            
+throw err; // to (console.log("Nothing found with this key "+self.params.Key))
 ```            
 
 You are done!!
