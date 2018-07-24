@@ -1,10 +1,11 @@
 {
   "name": "exotel-log-demo",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project is for download files or upload files to **Amazon S3**.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,6 @@
     "node-schedule": "^1.3.0",
     "readline-sync": "^1.4.9",
     "s3fs": "git+https://github.com/RiptideElements/s3fs.git"
-  }
+  },
+  "devDependencies": {}
 }
