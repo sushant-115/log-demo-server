@@ -6,7 +6,7 @@ module.exports = {
     logfiles: ["/access-log/access-log", "/error-log/error-log", "/security-log/security-log"],
     period: 15, //in days
     dateformat: "YYYYMMDD", //default is (YYYYMMDD)
-    fileExtension: ["txt"] //specify for one(that will be for all) or for all
+    fileExtension: "txt" 
   },
   previousFileCheckDay :20,
   downloadOptions: [],

@@ -44,6 +44,7 @@ const downloadAction = () => {
     const day = (new Date() - ndt) / time;
     if (day > 90) {
       console.error("\x1b[31m", "Invalid dates check again");
+      process.exit();
     }
     return Math.floor(day);
   });
