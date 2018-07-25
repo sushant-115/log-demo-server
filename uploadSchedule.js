@@ -9,7 +9,7 @@ const dateFormat = require("./dateformat")
 const uploadSchedule = () => {
   const time = 1000 * 60 * 60 * 24 * config.options.period; //milliseconds in 30 days
   const date = dateFormat(new Date(Date.now() - time));
-  const suffix = [ ...date, ".",config.options.fileExtension].join("");
+  const suffix = [...date, ".", config.options.fileExtension].join("");
   config.options.logfiles.forEach(file => {
     const filePath = file + suffix;
     if (fs.existsSync(filePath)) {
@@ -24,10 +24,10 @@ const uploadSchedule = () => {
               console.log("done " + file + fileName);
             }
           })
-        }else{
+        } else {
           console.log("\x1b[31m", "File uploading was unsuccessful");
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err);
       })
     } else {
@@ -38,7 +38,7 @@ const uploadSchedule = () => {
 }
 //module.exports = uploadSchedule;
 schedule.scheduleJob(config.schedule, () => {
-  
+
 })
 console.log("Task scheduled");
 uploadSchedule();

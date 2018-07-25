@@ -23,7 +23,7 @@ const errorLog = {
 const creatingDateArray = (dt) => {
   const time = 1000 * 60 * 60 * 24 * dt; //milliseconds in 30 days
   const date = dateFormat(new Date(Date.now() - time));
-  return [...date, ".",config.options.fileExtension].join("");
+  return [...date, ".", config.options.fileExtension].join("");
 
 }
 
@@ -58,7 +58,7 @@ const downloadAction = () => {
     }
     const time = 1000 * 60 * 60 * 24;
     const day = (new Date() - ndt) / time;
-    if(day>90) {
+    if (day > 90) {
       console.error("\x1b[31m", "Invalid dates check again");
     }
     return Math.floor(day);
@@ -82,17 +82,17 @@ const downloadAction = () => {
     config.downloadOptions.forEach(option => {
       if (Array.isArray(option.date) && option.date.length > 0) {
         option.date.forEach(date => {
-          options.Key = option.directory + date ;
+          options.Key = option.directory + date;
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
           //console.log(options.Key);
           const stream = s3.getObject(options).createReadStream();
-          stream.on("error" ,(err)=>{
-            console.log("\x1b[31m","Nothing found with the key",options.Key);
-          })  
+          stream.on("error", (err) => {
+            console.log("\x1b[31m", "Nothing found with the key", options.Key);
+          })
           stream.pipe(fs.createWriteStream("downloads/" + options.Key))
-          
+
         })
       }
     })
