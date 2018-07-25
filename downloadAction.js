@@ -4,20 +4,12 @@ const readline = require("readline-sync");
 const AWS = require("aws-sdk");
 const dateFormat = require("./dateformat");
 AWS.config.update({})
-const accessLog = {
-  folder: "access-log",
-  directory: "access-log/access-log",
-  date: [] //format :"YYYYMDD" <= M=1 to 9 or YYYYMMDD <=  M=10 to 12
+class InputFileName {
+  constructor(filePath ,folder){
+  this.folder = folder;
+  this.directory = filePath;
+  this.date =[]
 }
-const securityLog = {
-  folder: "security-log",
-  directory: "security-log/security-log",
-  date: []
-}
-const errorLog = {
-  folder: "error-log",
-  directory: "error-log/error-log",
-  date: []
 }
 
 const creatingDateArray = (dt) => {
@@ -27,26 +19,16 @@ const creatingDateArray = (dt) => {
 
 }
 
-const choiceLogSelector = (ch) => {
-  if (isNaN(ch)) {
-    console.error("\x1b[31m", ch + " is not a number");
-    process.exit();
-  }
-  if (+ch === 1) {
-    config.downloadOptions.push(accessLog);
-  } else if (+ch === 2) {
-    config.downloadOptions.push(securityLog);
-  } else if (+ch === 3) {
-    config.downloadOptions.push(errorLog);
-  } else {
-    console.log("\x1b[31m", "invalid input " + ch);
-    process.exit()
-  }
+const choiceLogSelector = (input) => {
+  const folder = input.split("/").filter((val ,index ,arr)=>index!==arr.length-1);
+  const filePath =input;
+  const downloadFileName = new InputFileName(filePath ,folder); 
+  config.downloadOptions.push(downloadFileName);
 }
 
 const downloadAction = () => {
 
-  const choice = readline.question("Enter space separated number for download that log:\n \n1.  access-log\n2.  security-log\n3.  error-log\n");
+  const choice = readline.question("Enter space separated Exact file Paths\n");
   const choiceArray = choice.split(" ").filter(ch => ch);
   choiceArray.forEach(ch => choiceLogSelector(ch));
   const dateChoice = readline.question("Enter log period two Dates(MM/DD/YYYY) space separated (e.g : 05/21/2018 06/14/2018)\n");
@@ -91,6 +73,7 @@ const downloadAction = () => {
           stream.on("error", (err) => {
             console.log("\x1b[31m", "Nothing found with the key", options.Key);
           })
+
           stream.pipe(fs.createWriteStream("downloads/" + options.Key))
 
         })

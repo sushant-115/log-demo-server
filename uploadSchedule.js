@@ -11,10 +11,10 @@ const uploadSchedule = () => {
   const date = dateFormat(new Date(Date.now() - time));
   const suffix = [...date, ".", config.options.fileExtension].join("");
   config.options.logfiles.forEach(file => {
-    const filePath = file + suffix;
+    const filePath = config.options.parentDirectory+file + suffix;
     if (fs.existsSync(filePath)) {
       const stream = fs.createReadStream(filePath);
-      s3fs.writeFile(file + fileName, stream).then((etag) => {
+      s3fs.writeFile(file + suffix, stream).then((etag) => {
         if (etag) {
           console.log(etag);
           fs.unlink(filePath, (err) => {
