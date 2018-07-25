@@ -27,7 +27,9 @@ const choiceLogSelector = (input) => {
 }
 
 const downloadAction = () => {
-
+   if(!fs.existsSync("./downloads")){
+    fs.mkdirSync("downloads");
+  }
   const choice = readline.question("Enter space separated Exact file Paths\n");
   const choiceArray = choice.split(" ").filter(ch => ch);
   choiceArray.forEach(ch => choiceLogSelector(ch));
