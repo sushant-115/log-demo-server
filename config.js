@@ -2,9 +2,9 @@ module.exports = {
   credentials: {
   },
   options: { //Add the log file path without date and extension
-    parentDirectory: __dirname,
-    logfiles: ["/access-log/access-log", "/error-log/error-log", "/security-log/security-log"],
-    period: 15, //in days
+    //parentDirectory: __dirname,
+    logfiles: ["/home/exotel/exotel-log-demo/access-log/access-log", "/home/exotel/exotel-log-demo/error-log/error-log", "/home/exotel/exotel-log-demo/security-log/security-log"],
+    period: 30, //in days
     dateformat: "YYYYMMDD", //default is (YYYYMMDD)
     fileExtension: "txt" 
   },
