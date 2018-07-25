@@ -73,7 +73,7 @@ const downloadAction = () => {
           stream.on("error", (err) => {
             console.log("\x1b[31m", "Nothing found with the key", options.Key);
           })
-
+	console.log(stream);
           stream.pipe(fs.createWriteStream("downloads/" + options.Key))
 
         })

@@ -4,7 +4,7 @@ module.exports = {
   options: { //Add the log file path without date and extension
     parentDirectory :__dirname,
     logfiles: ["/access-log/access-log", "/error-log/error-log", "/security-log/security-log"],
-    period: 39, //in days
+    period: 1, //in days
     dateformat: "YYYYMMDD", //default is (YYYYMMDD)
     fileExtension: ["txt"] //specify for one(that will be for all) or for all
   },
