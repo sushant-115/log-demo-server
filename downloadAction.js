@@ -3,8 +3,7 @@ const config = require("./config");
 const readline = require("readline-sync");
 const AWS = require("aws-sdk");
 AWS.config.update({
-  accessKeyId: config.credentials.accessKeyId,
-  secretAccessKey: config.credentials.secretAccessKey
+  
 })
 const accessLog = {
   folder: "access-log",
@@ -85,7 +84,7 @@ const downloadAction = () => {
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
-          console.log(options.Key);
+          //console.log(options.Key);
           try {
             const stream = s3.getObject(options).createReadStream().pipe(fs.createWriteStream("downloads/" + options.Key));
           } catch (e) {
