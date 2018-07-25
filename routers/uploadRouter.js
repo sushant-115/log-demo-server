@@ -4,10 +4,7 @@ const fs = require("fs");
 const S3FS = require("s3fs");
 const multiparty = require("connect-multiparty");
 const config = require("../config");
-const s3fs = new S3FS("exotel-log-server", {
-  accessKeyId: config.credentials.accessKeyId,
-  secretAccessKey: config.credentials.secretAccessKey
-})
+const s3fs = new S3FS("exotel-log-server", {})
 s3fs.create();
 const multipartyMiddleware = multiparty();
 router.use(multipartyMiddleware);

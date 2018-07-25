@@ -2,9 +2,8 @@ const fs = require("fs");
 const config = require("./config");
 const readline = require("readline-sync");
 const AWS = require("aws-sdk");
-AWS.config.update({
-  
-})
+const dateFormat = require("./dateformat");
+AWS.config.update({})
 const accessLog = {
   folder: "access-log",
   directory: "access-log/access-log",
@@ -23,8 +22,8 @@ const errorLog = {
 
 const creatingDateArray = (dt) => {
   const time = 1000 * 60 * 60 * 24 * dt; //milliseconds in 30 days
-  const date = new Date(Date.now() - time);
-  return [date.getFullYear(), date.getMonth() + 1, date.getDate(), ".txt"].join("");
+  const date = dateFormat(new Date(Date.now() - time));
+  return [...date, ".",config.options.fileExtension].join("");
 
 }
 
@@ -59,6 +58,9 @@ const downloadAction = () => {
     }
     const time = 1000 * 60 * 60 * 24;
     const day = (new Date() - ndt) / time;
+    if(day>90) {
+      console.error("\x1b[31m", "Invalid dates check again");
+    }
     return Math.floor(day);
   });
   if (dateChoiceArray[0] - dateChoiceArray[1] < 0 || dateChoiceArray[0] - dateChoiceArray[1] > 60) {
@@ -80,16 +82,17 @@ const downloadAction = () => {
     config.downloadOptions.forEach(option => {
       if (Array.isArray(option.date) && option.date.length > 0) {
         option.date.forEach(date => {
-          options.Key = option.directory + date + ".txt";
+          options.Key = option.directory + date ;
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
           //console.log(options.Key);
-          try {
-            const stream = s3.getObject(options).createReadStream().pipe(fs.createWriteStream("downloads/" + options.Key));
-          } catch (e) {
-            console.log("Nothing found with name" + options.Key);
-          }
+          const stream = s3.getObject(options).createReadStream();
+          stream.on("error" ,(err)=>{
+            console.log("\x1b[31m","Nothing found with the key",options.Key);
+          })  
+          stream.pipe(fs.createWriteStream("downloads/" + options.Key))
+          
         })
       }
     })
