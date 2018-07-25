@@ -21,7 +21,7 @@ const uploadSchedule = () => {
             if (err)
               console.error(err);
             else {
-              console.log("done " + file + fileName);
+              console.log("done " + filePath);
             }
           })
         } else {
