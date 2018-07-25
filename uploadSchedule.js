@@ -7,6 +7,8 @@ const dateFormat = require("./dateformat")
 
 
 const uploadSchedule = () => {
+  let dateRequire = config.options.period;
+  while(dateRequire>=config.options.period+config.previousFileCheckDay){
   const time = 1000 * 60 * 60 * 24 * config.options.period; //milliseconds in 30 days
   const date = dateFormat(new Date(Date.now() - time));
   const suffix = [...date, ".", config.options.fileExtension].join("");
@@ -31,9 +33,13 @@ const uploadSchedule = () => {
         console.log(err);
       })
     } else {
+      if(dateRequire==config.options.period)
       console.log("File does not exist" + filePath);
     }
   })
+  dateRequire++;
+  console.log(dateRequire , config.options.period);
+}
 
 }
 //module.exports = uploadSchedule;

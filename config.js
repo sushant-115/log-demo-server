@@ -8,6 +8,7 @@ module.exports = {
     dateformat: "YYYYMMDD", //default is (YYYYMMDD)
     fileExtension: ["txt"] //specify for one(that will be for all) or for all
   },
+  previousFileCheckDay :20,
   downloadOptions: [],
   schedule: "59 * * * * " //schedule format (sec min hour date month year )
 }
