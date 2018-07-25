@@ -5,11 +5,11 @@ const AWS = require("aws-sdk");
 const dateFormat = require("./dateformat");
 AWS.config.update({})
 class InputFileName {
-  constructor(filePath ,folder){
-  this.folder = folder;
-  this.directory = filePath;
-  this.date =[]
-}
+  constructor(filePath, folder) {
+    this.folder = folder;
+    this.directory = filePath;
+    this.date = []
+  }
 }
 
 const creatingDateArray = (dt) => {
@@ -20,9 +20,9 @@ const creatingDateArray = (dt) => {
 }
 
 const choiceLogSelector = (input) => {
-  const folder = input.split("/").filter((val ,index ,arr)=>index!==arr.length-1);
-  const filePath =input;
-  const downloadFileName = new InputFileName(filePath ,folder); 
+  const folder = input.split("/").filter((val, index, arr) => index !== arr.length - 1);
+  const filePath = input;
+  const downloadFileName = new InputFileName(filePath, folder);
   config.downloadOptions.push(downloadFileName);
 }
 
@@ -70,13 +70,13 @@ const downloadAction = () => {
           }
           //console.log(options.Key);
           const stream = s3.getObject(options).createReadStream();
-          
+
           stream.on("error", (err) => {
             console.log("\x1b[31m", "Nothing found with the key", options.Key);
           })
-          try{
+          try {
             stream.pipe(fs.createWriteStream("downloads/" + options.Key))
-          }catch(e){
+          } catch (e) {
             console.log("Error during wirting file");
           }
 
