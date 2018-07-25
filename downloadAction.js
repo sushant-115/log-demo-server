@@ -70,11 +70,16 @@ const downloadAction = () => {
           }
           //console.log(options.Key);
           const stream = s3.getObject(options).createReadStream();
+          
           stream.on("error", (err) => {
             console.log("\x1b[31m", "Nothing found with the key", options.Key);
           })
-
-          stream.pipe(fs.createWriteStream("downloads/" + options.Key))
+          console.log(stream)
+          try{
+            stream.pipe(fs.createWriteStream("downloads/" + options.Key))
+          }catch(e){
+            console.log("Error during wirting file");
+          }
 
         })
       }
