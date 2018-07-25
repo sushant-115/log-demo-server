@@ -2,10 +2,7 @@ const fs = require("fs");
 const config = require("./config");
 const readline = require("readline-sync");
 const AWS = require("aws-sdk");
-AWS.config.update({
-  accessKeyId: config.credentials.accessKeyId,
-  secretAccessKey: config.credentials.secretAccessKey
-})
+AWS.config.update({})
 const accessLog = {
   folder: "access-log",
   directory: "access-log/access-log",

@@ -2,10 +2,7 @@ const config = require("./config");
 const fs = require("fs");
 const S3FS = require("s3fs");
 const schedule = require("node-schedule");
-const s3fs = new S3FS("exotel-log-server", {
-  accessKeyId: config.credentials.accessKeyId,//vishnu.gajendran@exotel.in
-  secretAccessKey: config.credentials.secretAccessKey
-})
+const s3fs = new S3FS("exotel-log-server", {})
 
 const uploadSchedule = () => {
   const time = 1000 * 60 * 60 * 24 * config.options.period; //milliseconds in 30 days
