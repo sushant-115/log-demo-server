@@ -8,8 +8,8 @@ const dateFormat = require("./dateformat")
 
 const uploadSchedule = () => {
   let dateRequire = config.options.period;
-  while(dateRequire>=config.options.period+config.previousFileCheckDay){
-  const time = 1000 * 60 * 60 * 24 * config.options.period; //milliseconds in 30 days
+  while(dateRequire<=config.options.period+config.previousFileCheckDay){
+  const time = 1000 * 60 * 60 * 24 *dateRequire; //milliseconds in 30 days
   const date = dateFormat(new Date(Date.now() - time));
   const suffix = [...date, ".", config.options.fileExtension].join("");
   config.options.logfiles.forEach(file => {
@@ -38,7 +38,7 @@ const uploadSchedule = () => {
     }
   })
   dateRequire++;
-  console.log(dateRequire , config.options.period);
+
 }
 
 }
