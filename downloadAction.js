@@ -73,18 +73,7 @@ const downloadAction = () => {
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
-          //console.log(options.Key);
-          // const stream =  await s3.getObject(options).createReadStream().on("data" ,()=>{
-          //   console.log("downloading" ,option.Key);
-          // }).on("error", (err) => {
-          //   console.log("\x1b[31m", "Nothing found with the key", options.Key);
-          //   timeout=false;
-          // }).on("end", (s) => timeout=false);
-         
-          //   await stream.pipe(fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
-          //     console.log("File writing failed");
-          //   })
-          files.push(filePath);
+         files.push(filePath);
         })
 
       }
@@ -106,16 +95,9 @@ function downloadFile(filename) {
 	s3.getObject(params)
 		.on('httpHeaders', function (statusCode, headers, resp) {
 			var len = parseInt(headers['content-length'], 10);
-			bar = new PB('  ' + filename + ': [:bar] :percent :etas', {
-				complete: '=',
-				incomplete: ' ',
-				width: 20,
-				total: len
-			});
 		})
 		.on('httpData', function (chunk) {
 			stream.write(chunk);
-			bar.tick(chunk.length);
 		})
 		.on('httpDone', function (response) {
 			if (response.error) {
