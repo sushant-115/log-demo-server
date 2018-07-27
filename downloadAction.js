@@ -52,6 +52,10 @@ const downloadAction = () => {
     }
     return Math.floor(day);
   });
+  if(dateChoiceArray.length<2||dateChoiceArray>2){
+    console.error("\x1b[31m", "Please enter two space seperated dates");
+    process.exit();
+  }
   if (dateChoiceArray[0] - dateChoiceArray[1] < 0 || dateChoiceArray[0] - dateChoiceArray[1] > 60) {
     console.error("\x1b[31m", "Invalid dates check again");
     process.exit()
