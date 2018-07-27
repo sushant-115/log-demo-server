@@ -62,18 +62,18 @@ const downloadAction = () => {
   //console.log(dateChoiceArray, config.downloadOptions);
 
 
-  
+
   if (Array.isArray(config.downloadOptions) && config.downloadOptions.length > 0) {
-    
-    const files =[];
-    config.downloadOptions.forEach( option => {
+
+    const files = [];
+    config.downloadOptions.forEach(option => {
       if (Array.isArray(option.date) && option.date.length > 0) {
         option.date.forEach(date => {
-          const filePath = "downloads/"+option.directory+date;
+          const filePath = "downloads/" + option.directory + date;
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
-         files.push(filePath);
+          files.push(filePath);
         })
 
       }
@@ -84,31 +84,31 @@ const downloadAction = () => {
 }
 
 function downloadFile(filename) {
-	var deferred = Q.defer(),
-		output = filename,
-		stream = fs.createWriteStream(output),
-		params = {
-			Bucket: config.bucket,
-			Key: filename
-		};
-	var bar;
-	s3.getObject(params)
-		.on('httpHeaders', function (statusCode, headers, resp) {
-			var len = parseInt(headers['content-length'], 10);
-		})
-		.on('httpData', function (chunk) {
-			stream.write(chunk);
-		})
-		.on('httpDone', function (response) {
-			if (response.error) {
-				deferred.reject(response.error);
-			} else {
-				deferred.resolve(output);
-			}
-			stream.end();
-		})
-		.send();
-	return deferred.promise;
+  let deferred = Q.defer(),
+    output = filename,
+    stream = fs.createWriteStream(output),
+    params = {
+      Bucket: config.bucket,
+      Key: filename
+    };
+  let bar;
+  s3.getObject(params)
+    .on('httpHeaders', function (statusCode, headers, resp) {
+      let len = parseInt(headers['content-length'], 10);
+    })
+    .on('httpData', function (chunk) {
+      stream.write(chunk);
+    })
+    .on('httpDone', function (response) {
+      if (response.error) {
+        deferred.reject(response.error);
+      } else {
+        deferred.resolve(output);
+      }
+      stream.end();
+    })
+    .send();
+  return deferred.promise;
 }
 
 //module.exports =downloadAction;
