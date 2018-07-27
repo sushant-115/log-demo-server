@@ -65,22 +65,21 @@ const downloadAction = () => {
   }
   if (Array.isArray(config.downloadOptions) && config.downloadOptions.length > 0) {
     const s3 = new AWS.S3();
-    config.downloadOptions.forEach(option => {
+    config.downloadOptions.forEach(async option => {
       if (Array.isArray(option.date) && option.date.length > 0) {
-        option.date.forEach(date => {
+        option.date.forEach(async date => {
           options.Key = option.directory + date;
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
           //console.log(options.Key);
-          const stream = s3.getObject(options).createReadStream();
+          const stream = await s3.getObject(options).createReadStream();
           stream.on("end", (s) => console.log(s));
           stream.on("error", (err) => {
             console.log("\x1b[31m", "Nothing found with the key", options.Key);
           })
           if (stream) {
-
-            stream.pipe(fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
+            await stream.pipe(await fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
               console.log("File writing failed");
             })
 
