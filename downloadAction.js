@@ -24,7 +24,7 @@ const creatingDateArray = (dt) => {
 }
 
 const choiceLogSelector = (input) => {
-  const folder = input.split("/").filter((val, index, arr) => index !== arr.length - 1);
+  const folder = input.split("/").filter((val, index, arr) => index === arr.length - 2);
   const filePath = input;
   const downloadFileName = new InputFileName(filePath, folder);
   config.downloadOptions.push(downloadFileName);
@@ -73,7 +73,7 @@ const downloadAction = () => {
     config.downloadOptions.forEach(option => {
       if (Array.isArray(option.date) && option.date.length > 0) {
         option.date.forEach(date => {
-          const filePath = "downloads/" + option.directory + date;
+          const filePath =  option.directory+ date;
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
@@ -89,8 +89,8 @@ const downloadAction = () => {
 
 function downloadFile(filename) {
   let deferred = Q.defer(),
-    output = filename,
-    stream = fs.createWriteStream(output),
+    output = filename.split("/").filter((d,i,arr)=>i>arr.length-3 ).join("/") ,
+    stream = fs.createWriteStream("downloads/" +output),
     params = {
       Bucket: config.bucket,
       Key: filename

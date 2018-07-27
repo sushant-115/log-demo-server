@@ -29,8 +29,9 @@ const uploadSchedule = () => {
         } else {
           console.log("\x1b[31m", "File uploading was unsuccessful");
         }
+        stream.end()
       }).catch(err => {
-        console.log(err);
+        console.log("Something happened wrong! Please try again");
       })
     } else {
       if(dateRequire==config.options.period)
