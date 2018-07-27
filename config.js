@@ -1,4 +1,5 @@
 module.exports = {
+  bucket :"exotel-log-server",
   credentials: {
   },
   options: { //Add the log file path without date and extension

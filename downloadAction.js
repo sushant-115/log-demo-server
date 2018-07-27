@@ -3,8 +3,11 @@ const config = require("./config");
 const readline = require("readline-sync");
 const AWS = require("aws-sdk");
 const dateFormat = require("./dateformat");
-const streamLength = require("stream-length");
+const Q = require('q');
+const PB = require('progress');
+let timeout;
 AWS.config.update({})
+const s3 = new AWS.S3();
 class InputFileName {
   constructor(filePath, folder) {
     this.folder = folder;
@@ -59,37 +62,71 @@ const downloadAction = () => {
   //console.log(dateChoiceArray, config.downloadOptions);
 
 
-  const options = {
-    Bucket: "exotel-log-server",
-    Key: ""
-  }
+  
   if (Array.isArray(config.downloadOptions) && config.downloadOptions.length > 0) {
-    const s3 = new AWS.S3();
-    config.downloadOptions.forEach(async option => {
+    
+    const files =[];
+    config.downloadOptions.forEach( option => {
       if (Array.isArray(option.date) && option.date.length > 0) {
-        option.date.forEach(async date => {
-          options.Key = option.directory + date;
+        option.date.forEach(date => {
+          const filePath = "downloads/"+option.directory+date;
           if (!fs.existsSync("downloads/" + option.folder)) {
             fs.mkdirSync("downloads/" + option.folder);
           }
           //console.log(options.Key);
-          const stream = await s3.getObject(options).createReadStream();
-          stream.on("end", (s) => console.log(s));
-          stream.on("error", (err) => {
-            console.log("\x1b[31m", "Nothing found with the key", options.Key);
-          })
-          if (stream) {
-            await stream.pipe(await fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
-              console.log("File writing failed");
-            })
-
-
-          }
+          // const stream =  await s3.getObject(options).createReadStream().on("data" ,()=>{
+          //   console.log("downloading" ,option.Key);
+          // }).on("error", (err) => {
+          //   console.log("\x1b[31m", "Nothing found with the key", options.Key);
+          //   timeout=false;
+          // }).on("end", (s) => timeout=false);
+         
+          //   await stream.pipe(fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
+          //     console.log("File writing failed");
+          //   })
+          files.push(filePath);
         })
 
       }
     })
+    files.map(downloadFile);
+
   }
+}
+
+function downloadFile(filename) {
+	var deferred = Q.defer(),
+		output = filename,
+		stream = fs.createWriteStream(output),
+		params = {
+			Bucket: config.bucket,
+			Key: filename
+		};
+	var bar;
+	s3.getObject(params)
+		.on('httpHeaders', function (statusCode, headers, resp) {
+			var len = parseInt(headers['content-length'], 10);
+			bar = new PB('  ' + filename + ': [:bar] :percent :etas', {
+				complete: '=',
+				incomplete: ' ',
+				width: 20,
+				total: len
+			});
+		})
+		.on('httpData', function (chunk) {
+			stream.write(chunk);
+			bar.tick(chunk.length);
+		})
+		.on('httpDone', function (response) {
+			if (response.error) {
+				deferred.reject(response.error);
+			} else {
+				deferred.resolve(output);
+			}
+			stream.end();
+		})
+		.send();
+	return deferred.promise;
 }
 
 //module.exports =downloadAction;
