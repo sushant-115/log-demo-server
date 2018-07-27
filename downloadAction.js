@@ -3,6 +3,7 @@ const config = require("./config");
 const readline = require("readline-sync");
 const AWS = require("aws-sdk");
 const dateFormat = require("./dateformat");
+const streamLength = require("stream-length");
 AWS.config.update({})
 class InputFileName {
   constructor(filePath, folder) {
@@ -27,7 +28,7 @@ const choiceLogSelector = (input) => {
 }
 
 const downloadAction = () => {
-   if(!fs.existsSync("./downloads")){
+  if (!fs.existsSync("./downloads")) {
     fs.mkdirSync("downloads");
   }
   const choice = readline.question("Enter space separated Exact file Paths\n");
@@ -77,11 +78,18 @@ const downloadAction = () => {
           stream.on("error", (err) => {
             console.log("\x1b[31m", "Nothing found with the key", options.Key);
           })
-          
-          stream.pipe(fs.createWriteStream("downloads/" + options.Key)).on("error" ,(err)=>{
-            console.log("File writing failed");
-          })
+          if (stream) {
+            streamLength(stream, {}, function (err, result) {
+              if (!err) {
+                stream.pipe(fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
+                  console.log("File writing failed");
+                }).on("end", (s) => console.log(s));
+              }
+            });
+
+          }
         })
+
       }
     })
   }
