@@ -74,18 +74,16 @@ const downloadAction = () => {
           }
           //console.log(options.Key);
           const stream = s3.getObject(options).createReadStream();
-
+          stream.on("end", (s) => console.log(s));
           stream.on("error", (err) => {
             console.log("\x1b[31m", "Nothing found with the key", options.Key);
           })
           if (stream) {
-            streamLength(stream, {}, function (err, result) {
-              if (!err) {
-                stream.pipe(fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
-                  console.log("File writing failed");
-                }).on("end", (s) => console.log(s));
-              }
-            });
+
+            stream.pipe(fs.createWriteStream("downloads/" + options.Key)).on("error", (err) => {
+              console.log("File writing failed");
+            })
+
 
           }
         })
